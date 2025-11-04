@@ -1,75 +1,74 @@
 # Java Network Calculator
 
-Este é um projeto simples em Java que demonstra a comunicação entre **dois computadores em rede local** utilizando o **protocolo TCP**.  
-O cliente envia um objeto contendo dois números e um operador matemático, e o servidor realiza o cálculo e devolve o resultado.
+Descrição
+---------
+Este projeto demonstra, de forma simples, a comunicação entre dois computadores em uma rede local utilizando o protocolo TCP em Java. O cliente envia ao servidor um objeto serializável que representa uma operação matemática (dois operandos e um operador). O servidor processa a operação e retorna o resultado ao cliente.
 
-## 🧩 Tecnologias utilizadas
+Tecnologias
+-----------
 - Java SE (Socket API)
-- Protocolo **TCP**
+- Protocolo TCP
 - Serialização de objetos (`Serializable`)
 
-## ⚙️ Estrutura do projeto
-O projeto contém três classes principais:
+Conteúdo do repositório
+-----------------------
+- `Operation.java` — Classe serializável que representa a operação matemática (campos: `a`, `b`, `operator`).
+- `Server.java` — Aplicação servidor: aguarda conexões, recebe um objeto `Operation`, realiza o cálculo e devolve o resultado.
+- `Client.java` — Aplicação cliente: cria e envia um objeto `Operation` para o servidor e exibe o resultado retornado.
 
-- `Operation.java` — Classe serializável que representa a operação matemática (`a`, `b`, `operator`)
-- `Server.java` — Servidor que recebe a operação, calcula e devolve o resultado
-- `Client.java` — Cliente que envia a operação e recebe o resultado
+Requisitos
+----------
+- JDK (Java SE) instalado (versão compatível com compilação e execução de arquivos `.java`).
+- Dois computadores conectados na mesma rede local (um atuando como servidor e outro como cliente).
 
-## 💻 Como executar
+Como executar
+-------------
 
-### 1. Configurar os dois computadores
-- Ambos devem estar na **mesma rede local** (Wi-Fi ou cabo).
-- Descubra o **endereço IP** do computador que será o **servidor**:
-    - **Linux:** `hostname -I`
-    - **Windows:** `ipconfig`
+1. Determine o IP do computador que será o servidor:
+   - Linux: `hostname -I`
+   - Windows: `ipconfig`
 
-### 2. No servidor (Linux)
-1. Compile os arquivos:
-```bash
-javac Operation.java Server.java
-```
-   
-Execute o servidor:
-```bash
-java Server
-```
+2. No computador que será o servidor:
+   - Compile:
+     ```bash
+     javac Operation.java Server.java
+     ```
+   - Execute:
+     ```bash
+     java Server
+     ```
+   - O servidor aguarda conexões na porta padrão 5000 (pode ser alterada diretamente no código, se necessário).
 
-Ele ficará aguardando conexões na porta 5000.
+3. No computador que será o cliente:
+   - Copie `Operation.java` (mesma definição do servidor).
+   - No código do cliente, atualize o endereço do servidor substituindo `SERVER_IP` pelo IP real do servidor. Exemplo:
+     ```java
+     Socket socket = new Socket("192.168.x.x", 5000);
+     ```
+   - Compile e execute:
+     ```bash
+     javac Operation.java Client.java
+     java Client
+     ```
 
-3. No cliente (Windows)
+Exemplo de execução esperada
+---------------------------
+- Saída do servidor (exemplo):
+  ```
+  Received: 10 + 5
+  ```
+- Saída do cliente (exemplo):
+  ```
+  Result from server: 15
+  ```
 
-Copie o mesmo arquivo Operation.java.
+Observações e limitações
+------------------------
+- Este projeto foi testado entre máquinas Windows e Linux na mesma rede local.
+- A comunicação é baseada em TCP, garantindo entrega confiável e ordenada dos dados.
+- A porta padrão utilizada é a 5000; altere-a nos arquivos de código se necessário.
+- O projeto é um exemplo didático e não implementa controles avançados de segurança, autenticação nem tratamento de múltiplas conexões concorrentes além do comportamento já presente no código.
 
-No código do cliente, substitua SERVER_IP pelo IP do servidor:
-```java
-Socket socket = new Socket("192.168.x.x", 5000);
-```
-
-
-Compile e execute:
-```cmd
-javac Operation.java Client.java
-java Client
-```
-
-4. Resultado esperado
-
-O servidor mostrará a operação recebida:
-```makefile
-Received: 10 + 5
-```
-
-
-O cliente mostrará o resultado:
-
-```makefile
-Result from server: 15
-```
-
-📡 Observações
-
-Este projeto utiliza TCP, garantindo entrega confiável e ordenada dos dados.
-
-O exemplo foi testado entre Windows ↔ Linux em uma mesma rede local.
-
-A porta padrão é 5000, mas pode ser alterada nos códigos.
+Contribuições e uso
+-------------------
+- Este repositório serve como base de estudo e demonstração. Para adaptar ou estender o projeto, edite os arquivos `.java` conforme necessário e recompilile.
